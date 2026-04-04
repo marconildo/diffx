@@ -9,12 +9,14 @@ export interface Settings {
   staged: boolean
   untracked: boolean
   diffStyle: 'split' | 'unified'
+  defaultTabSize: number
 }
 
 const DEFAULTS: Settings = {
   staged: true,
   untracked: true,
   diffStyle: 'split',
+  defaultTabSize: 4,
 }
 
 export function loadSettings(): Settings {

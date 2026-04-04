@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { GitBranch } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { GitBranch, Settings } from 'lucide-react'
 import type { DiffOptions } from '../hooks/useDiff'
 
 interface ToolbarProps {
@@ -11,9 +11,11 @@ interface ToolbarProps {
   commentCount: number
   diffStyle: 'split' | 'unified'
   diffOptions: DiffOptions
+  defaultTabSize: number
   customMode: boolean
   onDiffStyleChange: (style: 'split' | 'unified') => void
   onDiffOptionsChange: (options: DiffOptions) => void
+  onDefaultTabSizeChange: (size: number) => void
   onCopyComments: () => Promise<void>
 }
 
@@ -26,18 +28,34 @@ export function Toolbar({
   commentCount,
   diffStyle,
   diffOptions,
+  defaultTabSize,
   customMode,
   onDiffStyleChange,
   onDiffOptionsChange,
+  onDefaultTabSizeChange,
   onCopyComments,
 }: ToolbarProps) {
   const [copied, setCopied] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const settingsRef = useRef<HTMLDivElement>(null)
 
   const handleCopy = async () => {
     await onCopyComments()
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (settingsRef.current && !settingsRef.current.contains(e.target as Node)) {
+        setSettingsOpen(false)
+      }
+    }
+    if (settingsOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [settingsOpen])
 
   return (
     <div className="toolbar">
@@ -56,30 +74,6 @@ export function Toolbar({
         </span>
       </div>
       <div className="toolbar-right">
-        {!customMode && (
-          <>
-            <label className="toolbar-checkbox">
-              <input
-                type="checkbox"
-                checked={diffOptions.staged}
-                onChange={(e) =>
-                  onDiffOptionsChange({ ...diffOptions, staged: e.target.checked })
-                }
-              />
-              Staged
-            </label>
-            <label className="toolbar-checkbox">
-              <input
-                type="checkbox"
-                checked={diffOptions.untracked}
-                onChange={(e) =>
-                  onDiffOptionsChange({ ...diffOptions, untracked: e.target.checked })
-                }
-              />
-              Untracked
-            </label>
-          </>
-        )}
         <div className="toolbar-toggle">
           <button
             className={`btn btn-sm ${diffStyle === 'split' ? 'btn-active' : ''}`}
@@ -93,6 +87,55 @@ export function Toolbar({
           >
             Unified
           </button>
+        </div>
+        <div className="settings-wrapper" ref={settingsRef}>
+          <button
+            className={`btn btn-sm settings-btn ${settingsOpen ? 'btn-active' : ''}`}
+            onClick={() => setSettingsOpen(!settingsOpen)}
+            title="Settings"
+          >
+            <Settings size={14} />
+          </button>
+          {settingsOpen && (
+            <div className="settings-menu">
+              {!customMode && (
+                <>
+                  <label className="settings-item">
+                    <input
+                      type="checkbox"
+                      checked={diffOptions.staged}
+                      onChange={(e) =>
+                        onDiffOptionsChange({ ...diffOptions, staged: e.target.checked })
+                      }
+                    />
+                    Show staged
+                  </label>
+                  <label className="settings-item">
+                    <input
+                      type="checkbox"
+                      checked={diffOptions.untracked}
+                      onChange={(e) =>
+                        onDiffOptionsChange({ ...diffOptions, untracked: e.target.checked })
+                      }
+                    />
+                    Show untracked
+                  </label>
+                </>
+              )}
+              <div className="settings-item settings-item-spaced">
+                <span>Default tab size</span>
+                <select
+                  className="settings-select"
+                  value={defaultTabSize}
+                  onChange={(e) => onDefaultTabSizeChange(Number(e.target.value))}
+                >
+                  <option value={2}>2</option>
+                  <option value={4}>4</option>
+                  <option value={8}>8</option>
+                </select>
+              </div>
+            </div>
+          )}
         </div>
         <button
           className="btn btn-primary btn-sm"

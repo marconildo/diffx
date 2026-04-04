@@ -150,6 +150,71 @@ body {
   gap: 12px;
 }
 
+/* Settings dropdown */
+.settings-wrapper {
+  position: relative;
+}
+
+.settings-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+}
+
+.settings-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  min-width: 200px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  padding: 4px 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .settings-menu {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.settings-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--text);
+  cursor: pointer;
+  user-select: none;
+}
+
+.settings-item-spaced {
+  justify-content: space-between;
+}
+
+.settings-item:hover {
+  background: var(--bg-secondary);
+}
+
+.settings-item input[type="checkbox"] {
+  cursor: pointer;
+}
+
+.settings-select {
+  padding: 2px 4px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
 .toolbar-toggle {
   display: flex;
   border: 1px solid var(--border);

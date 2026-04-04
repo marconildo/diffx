@@ -8,6 +8,7 @@ interface DiffViewerProps {
   files: FileDiffMetadata[]
   diffStyle: 'split' | 'unified'
   tabSizeMap: Record<string, number>
+  defaultTabSize: number
   viewedFiles: Set<string>
   binaryFiles: Map<string, BinaryFileInfo>
   onViewedChange: (filePath: string, viewed: boolean) => void
@@ -20,6 +21,7 @@ export function DiffViewer({
   files,
   diffStyle,
   tabSizeMap,
+  defaultTabSize,
   viewedFiles,
   binaryFiles,
   onViewedChange,
@@ -59,7 +61,7 @@ export function DiffViewer({
             filePath={filePath}
             annotations={getAnnotationsForFile(filePath)}
             diffStyle={diffStyle}
-            tabSize={tabSizeMap[filePath] ?? 4}
+            tabSize={tabSizeMap[filePath] ?? defaultTabSize}
             viewed={viewedFiles.has(filePath)}
             onViewedChange={onViewedChange}
             onAddComment={onAddComment}

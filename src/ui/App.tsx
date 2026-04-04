@@ -124,9 +124,11 @@ export function App() {
         commentCount={comments.length}
         diffStyle={settings.diffStyle}
         diffOptions={{ staged: settings.staged, untracked: settings.untracked }}
+        defaultTabSize={settings.defaultTabSize}
         customMode={customMode}
         onDiffStyleChange={(style) => updateSettings({ diffStyle: style })}
         onDiffOptionsChange={(options) => updateSettings(options)}
+        onDefaultTabSizeChange={(size) => updateSettings({ defaultTabSize: size })}
         onCopyComments={copyAllComments}
       />
       <div className="app-body">
@@ -144,6 +146,7 @@ export function App() {
             files={files}
             diffStyle={settings.diffStyle}
             tabSizeMap={tabSizeMap}
+            defaultTabSize={settings.defaultTabSize}
             viewedFiles={viewedFiles}
             binaryFiles={binaryFileMap}
             onViewedChange={handleViewedChange}
