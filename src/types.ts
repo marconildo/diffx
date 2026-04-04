@@ -5,5 +5,6 @@ export interface ReviewComment {
   lineNumber: number
   lineContent: string
   body: string
+  status: 'open' | 'resolved'
   createdAt: number
 }

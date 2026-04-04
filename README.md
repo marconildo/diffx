@@ -70,15 +70,18 @@ This null check removal may cause a bug when `input` is undefined.
 
 Each comment includes the commented code line with a `+`/`-` prefix indicating whether it's an added or removed line.
 
-## Agent Skill
+## Agent Skills
 
-Install the [diffx-review skill](skills/diffx-review/SKILL.md) to invoke diffx from your AI coding agent:
+Install the diffx skills to use diffx directly from your AI coding agent:
 
 ```bash
-npx skills add wong2/diffx-cli
+npx skills add wong2/diffx
 ```
 
-Then use `/diffx-review` in your AI coding agent. The agent will launch diffx, you review and comment in the browser, paste the comments back, and the agent applies the fixes.
+The review workflow uses two commands:
+
+1. **`/diffx-start-review`** — Launches the diffx server and opens the browser. Review your changes and leave inline comments.
+2. **`/diffx-finish-review`** — The agent fetches all comments from the running diffx server via API, applies the requested changes, and marks each comment as resolved. The browser UI updates in real time as comments are resolved.
 
 ## License
 

@@ -426,6 +426,23 @@ body {
   }
 }
 
+.comment-resolved {
+  opacity: 0.6;
+}
+
+.comment-resolved .comment-bubble-body {
+  text-decoration: line-through;
+}
+
+.comment-bubble-resolved {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--success);
+  font-weight: 500;
+}
+
 /* Binary file diff */
 .binary-diff-header {
   display: flex;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { UserCircle } from 'lucide-react'
+import { UserCircle, CheckCircle2 } from 'lucide-react'
 import type { ReviewComment } from '../../types'
 
 function timeAgo(timestamp: number): string {
@@ -21,6 +21,7 @@ interface CommentBubbleProps {
 
 export function CommentBubble({ comment, onDelete }: CommentBubbleProps) {
   const [, setTick] = useState(0)
+  const isResolved = comment.status === 'resolved'
 
   useEffect(() => {
     const timer = setInterval(() => setTick((t) => t + 1), 30000)
@@ -28,17 +29,25 @@ export function CommentBubble({ comment, onDelete }: CommentBubbleProps) {
   }, [])
 
   return (
-    <div className="comment-bubble">
+    <div className={`comment-bubble ${isResolved ? 'comment-resolved' : ''}`}>
       <div className="comment-bubble-header">
         <UserCircle size={18} className="comment-bubble-avatar" />
         <span className="comment-bubble-time">{timeAgo(comment.createdAt)}</span>
-        <button
-          className="comment-bubble-delete"
-          onClick={() => onDelete(comment.id)}
-          title="Delete comment"
-        >
-          &times;
-        </button>
+        {isResolved && (
+          <span className="comment-bubble-resolved">
+            <CheckCircle2 size={14} />
+            Resolved
+          </span>
+        )}
+        {!isResolved && (
+          <button
+            className="comment-bubble-delete"
+            onClick={() => onDelete(comment.id)}
+            title="Delete comment"
+          >
+            &times;
+          </button>
+        )}
       </div>
       <div className="comment-bubble-body">{comment.body}</div>
     </div>

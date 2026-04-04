@@ -126,6 +126,7 @@ export function createApp(clientDir: string, customDiffArgs?: string[], commentS
       lineNumber: body.lineNumber,
       lineContent: body.lineContent,
       body: body.body,
+      status: 'open' as const,
       createdAt: Date.now(),
     }
     const created = await store.add(comment)
@@ -134,8 +135,8 @@ export function createApp(clientDir: string, customDiffArgs?: string[], commentS
 
   app.put('/api/comments/:id', async (c) => {
     const id = c.req.param('id')
-    const { body } = await c.req.json()
-    const updated = await store.update(id, body)
+    const { body, status } = await c.req.json()
+    const updated = await store.update(id, { body, status })
     if (!updated) return c.json({ error: 'Comment not found' }, 404)
     return c.json(updated)
   })

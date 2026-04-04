@@ -12,7 +12,7 @@ async function fetchComments(): Promise<ReviewComment[]> {
 
 export function useComments() {
   const queryClient = useQueryClient()
-  const { data: comments = [] } = useQuery({ queryKey: COMMENTS_KEY, queryFn: fetchComments })
+  const { data: comments = [] } = useQuery({ queryKey: COMMENTS_KEY, queryFn: fetchComments, refetchInterval: 3000 })
 
   const addMutation = useMutation({
     mutationFn: async (params: { filePath: string; side: 'deletions' | 'additions'; lineNumber: number; lineContent: string; body: string }) => {
@@ -39,11 +39,11 @@ export function useComments() {
   })
 
   const editMutation = useMutation({
-    mutationFn: async ({ id, body }: { id: string; body: string }) => {
+    mutationFn: async ({ id, body, status }: { id: string; body?: string; status?: ReviewComment['status'] }) => {
       const res = await fetch(`/api/comments/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ body }),
+        body: JSON.stringify({ body, status }),
       })
       return res.json() as Promise<ReviewComment>
     },
@@ -71,6 +71,13 @@ export function useComments() {
   const editComment = useCallback(
     (id: string, body: string) => {
       editMutation.mutate({ id, body })
+    },
+    [editMutation],
+  )
+
+  const resolveComment = useCallback(
+    (id: string) => {
+      editMutation.mutate({ id, status: 'resolved' })
     },
     [editMutation],
   )
@@ -125,6 +132,7 @@ export function useComments() {
     addComment,
     removeComment,
     editComment,
+    resolveComment,
     getAnnotationsForFile,
     formatAllComments,
     copyAllComments,
