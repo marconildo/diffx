@@ -70,6 +70,16 @@ This null check removal may cause a bug when `input` is undefined.
 
 Each comment includes the commented code line with a `+`/`-` prefix indicating whether it's an added or removed line.
 
+## Agent Skill
+
+Install the [diffx-review skill](skills/diffx-review/SKILL.md) to invoke diffx from your AI coding agent:
+
+```bash
+npx skills add wong2/diffx-cli
+```
+
+Then use `/diffx-review` in your AI coding agent. The agent will launch diffx, you review and comment in the browser, paste the comments back, and the agent applies the fixes.
+
 ## License
 
 MIT
