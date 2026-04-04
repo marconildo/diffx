@@ -5,5 +5,7 @@ export default defineConfig({
   format: 'esm',
   outDir: 'dist',
   clean: false,
-  external: ['open', 'get-port'],
+  deps: {
+    neverBundle: ['open', 'get-port'],
+  },
 })
