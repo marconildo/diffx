@@ -2,6 +2,7 @@
 import { parseArgs } from 'node:util'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
+import { readFileSync } from 'node:fs'
 import getPort from 'get-port'
 import { isGitRepo } from './git.js'
 import { startServer } from './server.js'
@@ -10,9 +11,37 @@ const { values, positionals } = parseArgs({
   options: {
     port: { type: 'string', short: 'p' },
     'no-open': { type: 'boolean', default: false },
+    help: { type: 'boolean' },
+    version: { type: 'boolean', short: 'v' },
   },
   allowPositionals: true,
 })
+
+if (values.help) {
+  console.log(`diffx - Local code review tool for git diffs
+
+Usage: diffx [options] [-- <git diff args>]
+
+Options:
+  -p, --port <port>  Port to run the server on (default: 3433)
+  --no-open          Don't open the browser automatically
+  -v, --version      Show version number
+  -h, --help         Show this help message
+
+Examples:
+  diffx                        Review uncommitted changes
+  diffx -- --staged            Review staged changes
+  diffx -- HEAD~3              Review last 3 commits
+  diffx -- main..feature       Compare branches`)
+  process.exit(0)
+}
+
+if (values.version) {
+  const __dirname = dirname(fileURLToPath(import.meta.url))
+  const pkg = JSON.parse(readFileSync(resolve(__dirname, '..', 'package.json'), 'utf-8'))
+  console.log(pkg.version)
+  process.exit(0)
+}
 
 // Everything after -- becomes custom git diff args
 const customDiffArgs = positionals.length > 0 ? positionals : undefined
