@@ -2,7 +2,7 @@
 
 A code review tool designed for the coding agent workflow. Review AI-generated changes in a GitHub PR-like web UI, leave inline comments, then hand them back to your coding agent to fix.
 
-![screenshot](https://raw.githubusercontent.com/wong2/diffx-cli/main/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/wong2/diffx/main/screenshot.png)
 
 ## Install
 

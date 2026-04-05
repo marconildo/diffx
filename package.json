@@ -4,13 +4,14 @@
   "description": "Local code review tool for git diffs with a GitHub PR-like web UI",
   "type": "module",
   "license": "MIT",
-  "homepage": "https://github.com/wong2/diffx-cli",
+  "packageManager": "pnpm@10.32.1",
+  "homepage": "https://github.com/wong2/diffx",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wong2/diffx-cli.git"
+    "url": "git+https://github.com/wong2/diffx.git"
   },
   "bugs": {
-    "url": "https://github.com/wong2/diffx-cli/issues"
+    "url": "https://github.com/wong2/diffx/issues"
   },
   "keywords": [
     "git",
@@ -26,9 +27,12 @@
   ],
   "scripts": {
     "build": "vite build && tsdown",
+    "changeset": "changeset",
     "dev:client": "vite",
     "dev:server": "tsx src/cli.ts",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "release": "pnpm run build && changeset publish",
+    "version-packages": "changeset version"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
@@ -39,6 +43,7 @@
     "open": "^11.0.0"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
     "@pierre/diffs": "^1.1.10",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
